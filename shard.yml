@@ -1,0 +1,19 @@
+name: mailmate_cli
+version: 0.1.0
+description: MailMate CLI — manage your physical mail from the terminal
+
+authors:
+  - aluminumio
+
+license: MIT
+
+dependencies:
+  athena-console:
+    github: athena-framework/console
+    version: ~> 0.3
+  mailmate_api:
+    github: Win-hhm/mailmate-crystal-sdk
+
+targets:
+  mailmate:
+    main: src/mailmate_cli.cr

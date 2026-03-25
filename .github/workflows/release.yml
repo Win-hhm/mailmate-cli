@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - os: linux-x86_64
+            runner: ubuntu-latest
+            crystal: latest
+            binary: mailmate
+          - os: macos-arm64
+            runner: macos-14
+            crystal: latest
+            binary: mailmate
+          - os: macos-x86_64
+            runner: macos-13
+            crystal: latest
+            binary: mailmate
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+
+      - name: Install dependencies
+        run: shards install --production
+
+      - name: Build release binary
+        run: shards build mailmate --release --no-debug
+
+      - name: Rename binary
+        run: mv bin/${{ matrix.binary }} bin/mailmate-${{ matrix.os }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mailmate-${{ matrix.os }}
+          path: bin/mailmate-${{ matrix.os }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: bin/
+
+      - name: Generate checksums
+        run: |
+          cd bin
+          find . -name 'mailmate-*' -not -name '*.sha256' | while read f; do
+            sha256sum "$f" >> sha256sums.txt
+          done
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            bin/**/mailmate-*
+            bin/sha256sums.txt
+          generate_release_notes: true
