@@ -73,9 +73,6 @@ module MailMate
       MailMateAPI::Configuration.new.tap do |c|
         c.scheme = uri.scheme || "https"
         c.host   = uri.host   || "app.mailmate.jp"
-        c.api_key["access-token"] = @credentials.access_token
-        c.api_key["client"]       = @credentials.client_id
-        c.api_key["uid"]          = @credentials.uid
       end
     end
   end

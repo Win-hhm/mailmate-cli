@@ -11,6 +11,9 @@ module MailMate
     property uid : String
     property base_url : String = "https://app.mailmate.jp"
 
+    def initialize(@access_token : String, @client_id : String, @uid : String, @base_url : String = "https://app.mailmate.jp")
+    end
+
     def self.path : Path
       Path.home / ".config" / "mailmate" / "credentials.json"
     end

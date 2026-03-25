@@ -1,5 +1,6 @@
 # Files listed here are protected from being overwritten on regeneration.
 # Hand-written — never overwrite:
+src/openapi_client/configuration.cr
 src/mailmate_api/client.cr
 src/mailmate_api/credentials.cr
 src/mailmate_api.cr

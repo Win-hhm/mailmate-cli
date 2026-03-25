@@ -222,7 +222,7 @@ module MailMateAPI
           type: "api_key",
           in: "header",
           key: "access-token",
-          value: api_key_with_prefix(:access-token)
+          value: api_key_with_prefix(:"access-token")
         },
         "client_id" => {
           type: "api_key",

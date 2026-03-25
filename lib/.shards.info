@@ -18,7 +18,7 @@ shards:
     version: 1.6.2
   mailmate_api:
     git: https://github.com/win-hhm/mailmate-crystal-sdk.git
-    version: 0.1.0+git.commit.b8ad37fdb7110299daeabe22a6ba912c91f5c1ad
+    version: 0.1.0+git.commit.34cd61aa725ed3101a7873138844aa2834d57e15
   any_hash:
     git: https://github.com/sija/any_hash.cr.git
     version: 0.2.5

@@ -7,9 +7,9 @@ module MailMate::CLI
     protected def configure : Nil
       @description = "Show mail item detail (use -j for JSON with S3 links)"
       self
-        .add_argument("id", :required, "Item ID")
-        .add_option("inbox", "i", :optional, "Inbox ID (auto-selected if you have one inbox)", nil)
-        .add_option("json", "j", :none, "Output raw JSON (includes pre-signed S3 links to scanned contents)")
+        .argument("id", :required, "Item ID")
+        .option("inbox", "i", :optional, "Inbox ID (auto-selected if you have one inbox)", nil)
+        .option("json", "j", :none, "Output raw JSON (includes pre-signed S3 links to scanned contents)")
     end
 
     protected def execute(input : ACON::Input::Interface, output : ACON::Output::Interface) : ACON::Command::Status

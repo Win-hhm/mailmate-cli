@@ -7,10 +7,10 @@ module MailMate::CLI
     protected def configure : Nil
       @description = "List mail items"
       self
-        .add_option("inbox", "i", :optional, "Inbox ID (auto-selected if you have one inbox)", nil)
-        .add_option("page", "p", :optional, "Page number", "1")
-        .add_option("per-page", nil, :optional, "Items per page", "20")
-        .add_option("keyword", "k", :optional, "Filter by keyword", nil)
+        .option("inbox", "i", :optional, "Inbox ID (auto-selected if you have one inbox)", nil)
+        .option("page", "p", :optional, "Page number", "1")
+        .option("per-page", nil, :optional, "Items per page", "20")
+        .option("keyword", "k", :optional, "Filter by keyword", nil)
     end
 
     protected def execute(input : ACON::Input::Interface, output : ACON::Output::Interface) : ACON::Command::Status

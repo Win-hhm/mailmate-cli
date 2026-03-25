@@ -20,8 +20,8 @@ module MailMate::CLI
 
       helper = self.helper(ACON::Helper::Question)
 
-      email    = helper.ask(input, output, ACON::Question(String).new("Email: ", ""))
-      password = helper.ask(input, output, ACON::Question(String).new("Password: ", "").tap { |q| q.hidden = true })
+      email    = helper.ask(input, output, ACON::Question(String).new("Email: ", "")).as(String)
+      password = helper.ask(input, output, ACON::Question(String).new("Password: ", "").tap { |q| q.hidden = true }).as(String)
 
       output.puts "Authenticating…"
 
@@ -37,9 +37,9 @@ module MailMate::CLI
           return ACON::Command::Status::FAILURE
         end
 
-        token     = headers["access-token"]? || raise "Missing access-token header"
-        client_id = headers["client"]?        || raise "Missing client header"
-        uid       = headers["uid"]?           || raise "Missing uid header"
+        token     = header_string(headers, "access-token") || raise "Missing access-token header"
+        client_id = header_string(headers, "client")       || raise "Missing client header"
+        uid       = header_string(headers, "uid")          || raise "Missing uid header"
 
         MailMate::Credentials.new(
           access_token: token,
@@ -54,6 +54,15 @@ module MailMate::CLI
       end
 
       ACON::Command::Status::SUCCESS
+    end
+
+    private def header_string(headers, key : String) : String?
+      val = headers[key]?
+      case val
+      when Array then val.first?.try(&.to_s)
+      when String then val
+      else nil
+      end
     end
   end
 end
