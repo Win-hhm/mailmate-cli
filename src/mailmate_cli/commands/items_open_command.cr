@@ -5,7 +5,7 @@ module MailMate::CLI
     end
 
     protected def configure : Nil
-      self.description = "Request a mail item to be opened and scanned (takes up to 24 hours)"
+      @description = "Request a mail item to be opened and scanned (takes up to 24 hours)"
       self
         .add_argument("id", :required, "Item ID")
         .add_option("inbox", "i", :optional, "Inbox ID", nil)

@@ -1,0 +1,18 @@
+name: mailmate_api
+version: 0.1.0
+description: Crystal SDK for the MailMate API — auto-generated from swagger.yaml
+
+authors:
+  - aluminumio
+
+license: MIT
+
+dependencies:
+  any_hash:
+    github: Sija/any_hash.cr
+  crest:
+    github: mamantoha/crest
+    version: ~> 1.3
+
+targets:
+  # No binary — library only

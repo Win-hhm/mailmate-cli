@@ -1,0 +1,10 @@
+HTTP/1.1 302 Found
+access-control-allow-credentials: true
+access-control-allow-origin: *
+location: /get
+date: Mon, 24 Nov 2025 18:10:49 GMT
+server: Fly/0dffd420 (2025-11-24)
+via: 1.1 fly.io, 1.1 fly.io
+fly-request-id: 01KAVGZAVYYN27MPA176541AD5-fra
+content-length: 0
+

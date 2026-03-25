@@ -5,7 +5,7 @@ module MailMate::CLI
     end
 
     protected def configure : Nil
-      self.description = "Show account info and inboxes"
+      @description = "Show account info and inboxes"
     end
 
     protected def execute(input : ACON::Input::Interface, output : ACON::Output::Interface) : ACON::Command::Status

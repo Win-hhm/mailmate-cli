@@ -1,0 +1,30 @@
+version: 2.0
+shards:
+  any_hash:
+    git: https://github.com/sija/any_hash.cr.git
+    version: 0.2.5
+
+  athena-clock:
+    git: https://github.com/athena-framework/clock.git
+    version: 0.2.0
+
+  athena-console:
+    git: https://github.com/athena-framework/console.git
+    version: 0.4.2
+
+  crest:
+    git: https://github.com/mamantoha/crest.git
+    version: 1.6.2
+
+  http-client-digest_auth:
+    git: https://github.com/mamantoha/http-client-digest_auth.git
+    version: 0.6.0
+
+  http_proxy:
+    git: https://github.com/mamantoha/http_proxy.git
+    version: 0.14.0
+
+  mailmate_api:
+    git: https://github.com/win-hhm/mailmate-crystal-sdk.git
+    version: 0.1.0+git.commit.b8ad37fdb7110299daeabe22a6ba912c91f5c1ad
+

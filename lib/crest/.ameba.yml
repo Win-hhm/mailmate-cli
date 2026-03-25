@@ -1,0 +1,7 @@
+Globs:
+  - "**/*.cr"
+  - "!samples"
+  - "!lib"
+
+Naming/BlockParameterName:
+  Enabled: false

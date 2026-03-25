@@ -5,7 +5,7 @@ module MailMate::CLI
     end
 
     protected def configure : Nil
-      self.description = "List mail items"
+      @description = "List mail items"
       self
         .add_option("inbox", "i", :optional, "Inbox ID (auto-selected if you have one inbox)", nil)
         .add_option("page", "p", :optional, "Page number", "1")

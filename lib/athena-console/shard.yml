@@ -1,0 +1,22 @@
+name: athena-console
+
+version: 0.4.2
+
+crystal: ~> 1.13
+
+license: MIT
+
+repository: https://github.com/athena-framework/console
+
+documentation: https://athenaframework.org/Console
+
+description: |
+  Allows the creation of CLI based commands.
+
+authors:
+  - George Dietrich <dev@dietrich.pub>
+
+dependencies:
+  athena-clock:
+    github: athena-framework/clock
+    version: ~> 0.2.0

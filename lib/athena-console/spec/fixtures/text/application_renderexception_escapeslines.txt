@@ -1,0 +1,9 @@
+
+In \w+\.cr line \d+:
+                     
+  dont break here <  
+  info>!<\/info>      
+                     
+
+foo
+

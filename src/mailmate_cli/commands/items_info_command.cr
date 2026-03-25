@@ -5,7 +5,7 @@ module MailMate::CLI
     end
 
     protected def configure : Nil
-      self.description = "Show mail item detail (use -j for JSON with S3 links)"
+      @description = "Show mail item detail (use -j for JSON with S3 links)"
       self
         .add_argument("id", :required, "Item ID")
         .add_option("inbox", "i", :optional, "Inbox ID (auto-selected if you have one inbox)", nil)

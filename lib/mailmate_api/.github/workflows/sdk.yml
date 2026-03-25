@@ -1,0 +1,49 @@
+name: Regenerate SDK
+
+on:
+  # Triggered by mailmate-web CI after swagger.yaml is confirmed up to date
+  repository_dispatch:
+    types: [swagger-updated]
+  # Also allow manual runs
+  workflow_dispatch:
+    inputs:
+      swagger_ref:
+        description: 'Branch/tag of mailmate-web to pull swagger.yaml from'
+        default: 'master'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Download swagger.yaml from mailmate-web
+        run: |
+          REF="${{ github.event.inputs.swagger_ref || github.event.client_payload.ref || 'master' }}"
+          curl -fsSL \
+            "https://raw.githubusercontent.com/aluminumio/mailmate-web/${REF}/swagger/v1/swagger.yaml" \
+            -o /tmp/swagger.yaml
+          echo "Downloaded swagger.yaml ($(wc -l < /tmp/swagger.yaml) lines)"
+
+      - name: Generate SDK
+        env:
+          SWAGGER_PATH: /tmp/swagger.yaml
+        run: bin/generate
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes — SDK is already up to date."
+          else
+            git commit -m "chore: regenerate from swagger.yaml (${{ github.event.client_payload.sha || 'manual' }})"
+            git push
+          fi

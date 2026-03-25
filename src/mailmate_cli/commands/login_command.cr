@@ -10,7 +10,7 @@ module MailMate::CLI
     end
 
     protected def configure : Nil
-      self.description = "Authenticate with MailMate (saves credentials locally)"
+      @description = "Authenticate with MailMate (saves credentials locally)"
     end
 
     protected def execute(input : ACON::Input::Interface, output : ACON::Output::Interface) : ACON::Command::Status
