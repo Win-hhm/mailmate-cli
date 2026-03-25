@@ -11,6 +11,7 @@ module MailMate::CLI
 
     protected def configure : Nil
       @description = "Authenticate with MailMate (saves credentials locally)"
+      self.option("url", "u", :optional, "API base URL", "https://mailmate.jp")
     end
 
     protected def execute(input : ACON::Input::Interface, output : ACON::Output::Interface) : ACON::Command::Status
@@ -23,9 +24,14 @@ module MailMate::CLI
       email    = helper.ask(input, output, ACON::Question(String).new("Email: ", "")).as(String)
       password = helper.ask(input, output, ACON::Question(String).new("Password: ", "").tap { |q| q.hidden = true }).as(String)
 
+      base_url = input.option("url", String)
       output.puts "Authenticating…"
 
-      config   = MailMateAPI::Configuration.new
+      uri    = URI.parse(base_url)
+      config = MailMateAPI::Configuration.new.tap do |c|
+        c.scheme = uri.scheme || "https"
+        c.host   = "#{uri.host}#{uri.port ? ":#{uri.port}" : ""}"
+      end
       auth_api = MailMateAPI::AuthApi.new(MailMateAPI::ApiClient.new(config))
       request  = MailMateAPI::SignInRequest.new(email: email, password: password)
 
@@ -44,7 +50,8 @@ module MailMate::CLI
         MailMate::Credentials.new(
           access_token: token,
           client_id:    client_id,
-          uid:          uid
+          uid:          uid,
+          base_url:     base_url
         ).save
 
         Formatter.success(output, "Logged in as #{uid}")

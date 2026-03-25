@@ -27,7 +27,7 @@ module MailMate::CLI
       rows = inboxes.map do |inbox|
         a = inbox.attributes
         [
-          inbox.id,
+          inbox.id.to_s,
           Formatter.attr(a, "name"),
           Formatter.attr(a, "address"),
           Formatter.attr(a, "plan_name"),

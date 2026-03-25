@@ -34,7 +34,7 @@ module MailMate::CLI
       end
       result  = client.list_inboxes_flat
       inboxes = result.try(&.data) || [] of MailMateAPI::JsonapiResource
-      inboxes.first?.try(&.id.to_i) || (Formatter.error(output, "No inboxes found. Use --inbox <id>."); nil)
+      inboxes.first?.try(&.id) || (Formatter.error(output, "No inboxes found. Use --inbox <id>."); nil)
     end
   end
 end

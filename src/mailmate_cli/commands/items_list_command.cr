@@ -31,14 +31,14 @@ module MailMate::CLI
       rows = items.map do |item|
         a = item.attributes
         [
-          item.id,
-          Formatter.attr(a, "title"),
-          Formatter.attr(a, "status"),
-          Formatter.attr(a, "received_at"),
+          item.id.to_s,
+          Formatter.attr(a, "notes"),
+          Formatter.attr(a, "state"),
+          Formatter.attr(a, "received_on"),
         ]
       end
 
-      Formatter.table(output, ["ID", "Title", "Status", "Received"], rows)
+      Formatter.table(output, ["ID", "Notes", "State", "Received"], rows)
 
       if meta = result.meta
         output.puts "<comment>Page #{meta.current_page}/#{meta.total_pages} · #{meta.total_count} total</comment>"
@@ -67,7 +67,7 @@ module MailMate::CLI
         Formatter.error(output, "No inboxes found on your account.")
         nil
       when 1
-        inboxes.first.id.to_i
+        inboxes.first.id
       else
         output.puts "<comment>Multiple inboxes found — use --inbox <id>:</comment>"
         inboxes.each { |i| output.puts "  #{i.id}  #{Formatter.attr(i.attributes, "name")}" }

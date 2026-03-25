@@ -1,1 +1,0 @@
-\e\[30;46mdo you want \e\[39;49m\e\[33msomething\e\[39m\e\[30;46m\?\e\[39;49m

@@ -26,5 +26,5 @@ shards:
 
   mailmate_api:
     git: https://github.com/win-hhm/mailmate-crystal-sdk.git
-    version: 0.1.0+git.commit.34cd61aa725ed3101a7873138844aa2834d57e15
+    version: 0.1.0+git.commit.79e30aec8bb093951c1f8b31b19214a137ee94f6
 

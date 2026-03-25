@@ -1,8 +1,0 @@
-
-In \w+\.cr line \d+:
-                  
-  some exception  
-                  
-
-foo \[<info>\]
-
