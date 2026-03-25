@@ -63,8 +63,8 @@ jobs:
       - name: Generate checksums
         run: |
           cd bin
-          find . -name 'mailmate-*' -not -name '*.sha256' | while read f; do
-            sha256sum "$f" >> sha256sums.txt
+          find . -type f -name 'mailmate-*' | while read f; do
+            sha256sum "$f" | sed 's|.*/||' >> sha256sums.txt
           done
 
       - name: Create GitHub Release
