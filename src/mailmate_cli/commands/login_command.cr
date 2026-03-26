@@ -6,7 +6,7 @@ require "json"
 
 module MailMate::CLI
   OAUTH_CLIENT_ID    = "mailmate-cli"
-  OAUTH_CALLBACK_PORT = 9374
+  OAUTH_CALLBACK_HOST = "127.0.0.1"
   OAUTH_CALLBACK_PATH = "/callback"
 
   # Authenticates via browser-based OAuth 2.0 Authorization Code + PKCE flow
@@ -31,7 +31,11 @@ module MailMate::CLI
       code_verifier = generate_code_verifier
       challenge     = generate_code_challenge(code_verifier)
       state         = Random::Secure.hex(16)
-      redirect_uri  = "http://localhost:#{OAUTH_CALLBACK_PORT}#{OAUTH_CALLBACK_PATH}"
+
+      # Bind to port 0 so the OS assigns a free ephemeral port (RFC 8252 §7.3).
+      # Doorkeeper ignores the port for IP-based loopback redirect URIs.
+      port, server, result_channel = start_callback_server
+      redirect_uri = "http://#{OAUTH_CALLBACK_HOST}:#{port}#{OAUTH_CALLBACK_PATH}"
 
       auth_url = build_auth_url(base_url, challenge, state, redirect_uri)
 
@@ -43,7 +47,7 @@ module MailMate::CLI
       open_browser(auth_url)
 
       # Block until callback is received or we time out (2 minutes)
-      code = wait_for_callback
+      code = wait_for_callback(server, result_channel)
 
       if code.nil?
         Formatter.error(output, "Authentication timed out or was cancelled")
@@ -111,8 +115,11 @@ module MailMate::CLI
 
     # ── Local HTTP callback server ──────────────────────────────────────────
 
-    private def wait_for_callback : String?
-      result = Channel(String?).new(1)
+    # Starts the callback server bound to an OS-assigned ephemeral port.
+    # Returns {port, server, channel} — port goes into the redirect URI,
+    # channel delivers the auth code once the browser hits the callback.
+    private def start_callback_server : {Int32, HTTP::Server, Channel(String?)}
+      result_channel = Channel(String?).new(1)
 
       server = HTTP::Server.new do |ctx|
         query = HTTP::Params.parse(ctx.request.query || "")
@@ -121,25 +128,29 @@ module MailMate::CLI
         ctx.response.content_type = "text/html; charset=utf-8"
         if code
           ctx.response.print success_page
-          result.send(code)
+          result_channel.send(code)
         else
           ctx.response.status_code = 400
           ctx.response.print error_page
-          result.send(nil)
+          result_channel.send(nil)
         end
       end
 
-      server.bind_tcp("127.0.0.1", OAUTH_CALLBACK_PORT)
+      # Port 0 → OS assigns a free ephemeral port; read it back from the address.
+      address = server.bind_tcp(OAUTH_CALLBACK_HOST, 0)
       spawn { server.listen }
 
+      {address.port, server, result_channel}
+    end
+
+    private def wait_for_callback(server : HTTP::Server, result_channel : Channel(String?)) : String?
       code : String? = nil
       select
-      when v = result.receive
+      when v = result_channel.receive
         code = v
       when timeout(2.minutes)
         code = nil
       end
-
       server.close rescue nil
       code
     end
