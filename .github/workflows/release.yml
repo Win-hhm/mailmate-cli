@@ -17,11 +17,7 @@ jobs:
             crystal: latest
             binary: mailmate
           - os: macos-arm64
-            runner: macos-14
-            crystal: latest
-            binary: mailmate
-          - os: macos-x86_64
-            runner: macos-13
+            runner: macos-latest
             crystal: latest
             binary: mailmate
 
