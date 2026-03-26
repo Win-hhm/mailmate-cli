@@ -60,7 +60,7 @@ jobs:
         run: |
           cd bin
           find . -type f -name 'mailmate-*' | while read f; do
-            sha256sum "$f" | sed 's|.*/||' >> sha256sums.txt
+            echo "$(sha256sum "$f" | cut -d' ' -f1)  $(basename "$f")" >> sha256sums.txt
           done
 
       - name: Create GitHub Release
